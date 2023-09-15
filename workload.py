@@ -5,12 +5,13 @@ import matplotlib.gridspec as gridspec
 from pymongo import MongoClient     #pip install pymongo
 from faker import Faker #pip install faker
 from database import DB
+from datetime import date
 # n is the numbers of excecution 
-
+uri = "mongodb+srv://Preme:o863454681@cluster0.12hl7dd.mongodb.net/?retryWrites=true&w=majority"
 def Generate_read_workload(n):
     db = DB()
     # MongoDB connection
-    mongo_client = MongoClient("mongodb://your_mongodb_host:27017/")
+    mongo_client = MongoClient(uri)
     mongo_db = mongo_client["your_mongodb_database"]
     mongo_collection = mongo_db["tasks"]
 
@@ -19,6 +20,7 @@ def Generate_read_workload(n):
     excecute1=[]
     total_time_mysql = 0  
     total_time_mongodb = 0  
+    
     for i in range(n):
 
 #       Read random data in data set <<----
@@ -71,31 +73,54 @@ def Generate_read_workload(n):
 
 def Generate_create_workload(n):
     db = DB()
+    fake = Faker()
     # MongoDB connection
-    mongo_client = MongoClient("mongodb://your_mongodb_host:27017/")
-    mongo_db = mongo_client["your_mongodb_database"]
-    mongo_collection = mongo_db["tasks"]
-
+    mongo_client = MongoClient(uri)
+    mongo_db = mongo_client["Simulation"]
+    mongo_collection = mongo_db["Test"]
     timestamp1=[]
     timestamp_mon=[]
     excecute1=[]
     total_time_mysql = 0  
     total_time_mongodb = 0  
     for i in range(n):
-
-#       Read random data in data set <<----
+        first_name=fake.first_name()
+        last_name=fake.last_name()
+        date_of_birth=fake.date_of_birth()
+        age = (date.today() - fake.date_of_birth(maximum_age=120)).days//365
+        height=random.uniform(140,200)
+        pic=fake.binary(length=1024)
         excecute1.append(i)
         start_time_one_ex=time.time()
-        #db.read_person(random.randint(2,n-1))
+
+    
+        db.create_person(first_name,last_name,age,date_of_birth,height,pic) #   <<----
+
+
         end_time_one_ex=time.time()
         time_s=end_time_one_ex-start_time_one_ex
         total_time_mysql += time_s
         timestamp1.append(time_s)
 
-
-#                                    <<----
+        date_of_birth_dict = {
+            "year": date_of_birth.year,
+            "month": date_of_birth.month,
+            "day": date_of_birth.day
+        }
+        person_data = {
+            "first_name": first_name,
+            "last_name": last_name,
+            "age": age,
+            "date_of_birth": date_of_birth_dict,
+            "height": height,
+            "picture": pic  
+        }
         start_time_one_ex_mon = time.time()
-        # Read from MongoDB here using pymongo
+
+
+        mongo_collection.insert_one(person_data) #<-----
+
+
         end_time_one_ex_mon = time.time()
         time_mon = end_time_one_ex_mon - start_time_one_ex_mon
         total_time_mongodb += time_mon
@@ -136,7 +161,7 @@ def Generate_create_workload(n):
 def Generate_delete_workload(n):
     db = DB()
     # MongoDB connection
-    mongo_client = MongoClient("mongodb://your_mongodb_host:27017/")
+    mongo_client = MongoClient(uri)
     mongo_db = mongo_client["your_mongodb_database"]
     mongo_collection = mongo_db["tasks"]
 
@@ -199,7 +224,7 @@ def Generate_delete_workload(n):
 def Generate_update_workload(n):
     db = DB()
     # MongoDB connection
-    mongo_client = MongoClient("mongodb://your_mongodb_host:27017/")
+    mongo_client = MongoClient(uri)
     mongo_db = mongo_client["your_mongodb_database"]
     mongo_collection = mongo_db["tasks"]
 
@@ -210,19 +235,19 @@ def Generate_update_workload(n):
     total_time_mongodb = 0
     for i in range(n):
 
-#       Read random data in data set <<----
+
         excecute1.append(i)
         start_time_one_ex=time.time()
-        #db.read_person(random.randint(2,n-1))
+        #db.update_person() <<----
         end_time_one_ex=time.time()
         time_s=end_time_one_ex-start_time_one_ex
         total_time_mysql += time_s
         timestamp1.append(time_s)
 
 
-#                                    <<----
+
         start_time_one_ex_mon = time.time()
-        # Read from MongoDB here using pymongo
+        # Read from MongoDB here using pymongo <<----
         end_time_one_ex_mon = time.time()
         time_mon = end_time_one_ex_mon - start_time_one_ex_mon
         total_time_mongodb += time_mon
@@ -260,5 +285,5 @@ def Generate_update_workload(n):
     excecute1.clear()
 
 
-Generate_delete_workload(100)
+Generate_create_workload(10)
 #db = mysql.connector.connect()
