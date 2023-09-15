@@ -7,7 +7,7 @@ from faker import Faker #pip install faker
 from database import DB
 from datetime import date
 # n is the numbers of excecution 
-uri = "mongodb+srv://Preme:o863454681@cluster0.12hl7dd.mongodb.net/?retryWrites=true&w=majority"
+uri = ""
 def Generate_read_workload(n):
     db = DB()
     # MongoDB connection
@@ -285,5 +285,5 @@ def Generate_update_workload(n):
     excecute1.clear()
 
 
-Generate_create_workload(10)
+Generate_create_workload(1)
 #db = mysql.connector.connect()
