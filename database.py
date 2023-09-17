@@ -37,10 +37,9 @@ class DB():
         self.mysql_cursor.execute(query, values)
         self.mysql_conn.commit()
 
-    # Function to delete a person by ID
-    def delete_person(self, person_id):
-        query = "DELETE FROM Person WHERE id = %s"
-        self.mysql_cursor.execute(query, (person_id,))
+    def delete_person(self, Name):
+        query = "DELETE FROM Person WHERE name = %s"
+        self.mysql_cursor.execute(query, (Name,))
         self.mysql_conn.commit()
 
     def close_connection(self):
