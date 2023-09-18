@@ -6,7 +6,7 @@ class DB():
             host="localhost",
             port=3306,
             user="root",
-            password="o863454681",
+            password="",
             database="Simulation")
         self.mysql_cursor = self.mysql_conn.cursor()
 
@@ -36,6 +36,7 @@ class DB():
         values = (name, lastname, age, birthdate, height, picture, person_id)
         self.mysql_cursor.execute(query, values)
         self.mysql_conn.commit()
+
 
     def delete_person(self, Name):
         query = "DELETE FROM Person WHERE name = %s"

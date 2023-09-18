@@ -30,7 +30,7 @@ def Generate_read_workload(n):
     
         db.read_person(first_name) 
 
-
+ 
         end_time_one_ex=time.time()
         time_s=end_time_one_ex-start_time_one_ex
         total_time_mysql += time_s
@@ -66,8 +66,8 @@ def Generate_read_workload(n):
 
     # Adding side label for total times within the 40% width
     plt.subplot(gs[1])
-    plt.text(0, 0.5, f'Total Time (MySQL): {total_time_mysql/0.000001:.4f} µ secound', fontsize=24, color='blue')
-    plt.text(0, 0.7, f'Total Time (MongoDB): {total_time_mongodb/0.000001:.4f} µ secound', fontsize=24, color='green')
+    plt.text(0, 0.5, f'Total Time (MySQL): {total_time_mysql:.4f}  second', fontsize=24, color='blue')
+    plt.text(0, 0.7, f'Total Time (MongoDB): {total_time_mongodb:.4f}  second', fontsize=24, color='green')
     plt.axis('off')  # Turn off axis for the total time text
 
     plt.show()
@@ -328,7 +328,7 @@ def Generate_update_workload(n):
 
 
 #Generate_create_workload(1000)
-#Generate_read_workload(1000)
+Generate_read_workload(1000)
 #Generate_update_workload(1000)
-Generate_delete_workload(1000)
-#db = mysql.connector.connect()
+#Generate_delete_workload(1000)
+
